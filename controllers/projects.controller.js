@@ -17,5 +17,33 @@ const projectCtrl = {
       return raiseException(res, statusConstants.BAD_REQUEST_CODE, error);
     }
   },
+
+  // create new project
+  createProject: async (req, res) => {
+    // name, description, date, client, status, technologies, link
+    try {
+      const { name, description, date, client, status, technologies, link } =
+        req.body;
+      const newProject = new Projects({
+        name,
+        description,
+        date,
+        client,
+        status,
+        technologies,
+        link,
+      });
+
+      await newProject.save();
+
+      return responseServer(
+        res,
+        statusConstants.SUCCESS_CODE,
+        'Create data successfully'
+      );
+    } catch (error) {
+      return raiseException(res, statusConstants.BAD_REQUEST_CODE, error);
+    }
+  },
 };
 module.exports = projectCtrl;

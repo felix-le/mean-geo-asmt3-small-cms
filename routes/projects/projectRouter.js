@@ -5,7 +5,7 @@ const auth = require('../../middleware/auth');
 
 router.get('/', projectCtrl.getAllProjects);
 
-// router.post('/login', userCtrl.login);
+router.post('/create', projectCtrl.createProject);
 
 // router.post('/logout', userCtrl.logout);
 
