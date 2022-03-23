@@ -12,7 +12,4 @@ router.delete('/:id/delete', projectCtrl.deleteProject);
 // updated project
 router.put('/:id/update', projectCtrl.updateProject);
 
-// // refresh_token
-// router.get('/refresh_token', userCtrl.refreshToken);
-
 module.exports = router;

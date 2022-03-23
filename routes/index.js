@@ -3,6 +3,7 @@ const router = express.Router();
 const { statusConstants } = require('../constants/status.constant');
 const userRouter = require('./users');
 const projectRouter = require('./projects');
+const sectionRouter = require('./sections');
 
 router.get('/', function (req, res, next) {
   res
@@ -12,4 +13,5 @@ router.get('/', function (req, res, next) {
 
 router.use('/users', userRouter);
 router.use('/projects', projectRouter);
+router.use('/sections', sectionRouter);
 module.exports = router;
