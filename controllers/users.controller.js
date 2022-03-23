@@ -1,21 +1,22 @@
 const jwt = require('jsonwebtoken');
 const { raiseException, responseServer } = require('../utils/response');
 const { statusConstants } = require('../constants/status.constant');
-const mockData = {
-  id: 1,
-  username: 'test',
-  password: 'test',
-};
-
+const Users = require('../models/user.model');
+const isEqual = require('lodash/isEqual');
+// I didn't use bcrypt for password hashing because we don't have register form
 const userCtrl = {
   // get data from user model
   getUser: async (req, res) => {
     try {
+      const user = await Users.findById(req.user.id).select('-password');
+
+      if (!user) return res.status(400).json({ msg: 'User does not exist' });
+
       return responseServer(
         res,
         statusConstants.SUCCESS_CODE,
-        'Get data successfully',
-        mockData
+        'Get user successfully',
+        user
       );
     } catch (err) {
       console.log(err);
@@ -24,36 +25,51 @@ const userCtrl = {
 
   login: async (req, res) => {
     try {
-      const { username, password } = req.body;
+      const { email, password } = req.body;
 
-      if (!username || !password) {
+      if (!email || !password) {
+        return raiseException(
+          res,
+          statusConstants.BAD_REQUEST,
+          'Email or password is empty'
+        );
+      }
+      const user = await Users.findOne({ email });
+
+      if (!user) {
         return raiseException(
           res,
           statusConstants.BAD_REQUEST_CODE,
-          'Please enter username and password'
+          'User not found'
         );
       }
-      // compare with mock data
-      if (username === mockData.username && password === mockData.password) {
-        const accesstoken = createAccessToken({ id: username.id });
-        const refreshtoken = createRefreshToken({ id: username.id });
 
-        res.cookie('refreshtoken', refreshtoken, {
-          httpOnly: true,
-          path: '/user/refresh_token',
-          sameSite: 'None',
-          Secure: true,
-        });
-
-        res.json({ accesstoken });
-      } else {
-        // wrong username or password
+      const isMatch = await isEqual(password, user.password);
+      if (!isMatch) {
         return raiseException(
           res,
-          statusConstants.UNAUTHORIZED_CODE,
-          'Wrong username or password'
+          statusConstants.BAD_REQUEST_CODE,
+          'Password is incorrect'
         );
       }
+
+      // if login success, create access token and refresh token
+      const accessToken = createAccessToken({ id: user._id });
+      const refreshToken = createRefreshToken({ id: user._id });
+
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        path: '/user/refresh_token',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7d
+        secure: false,
+      });
+
+      return responseServer(
+        res,
+        statusConstants.SUCCESS_CODE,
+        'Login successfully',
+        accessToken
+      );
     } catch (err) {
       console.log(err);
     }
@@ -67,7 +83,7 @@ const userCtrl = {
         return raiseException(
           res,
           statusConstants.BAD_REQUEST_CODE,
-          'Pleaselogin'
+          'Please login'
         );
       }
       jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
