@@ -29,6 +29,10 @@ let projectsSchema = new mongoose.Schema(
     link: {
       type: String,
     },
+    img: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,

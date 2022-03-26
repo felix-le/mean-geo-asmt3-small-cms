@@ -22,8 +22,16 @@ const projectCtrl = {
   createProject: async (req, res) => {
     // name, description, date, client, status, technologies, link
     try {
-      const { name, description, date, client, status, technologies, link } =
-        req.body;
+      const {
+        name,
+        description,
+        date,
+        client,
+        status,
+        technologies,
+        link,
+        img,
+      } = req.body;
       const newProject = new Projects({
         name,
         description,
@@ -32,6 +40,7 @@ const projectCtrl = {
         status,
         technologies,
         link,
+        img,
       });
 
       await newProject.save();
@@ -64,8 +73,16 @@ const projectCtrl = {
   updateProject: async (req, res) => {
     try {
       const { id } = req.params;
-      const { name, description, date, client, status, technologies, link } =
-        req.body;
+      const {
+        name,
+        description,
+        date,
+        client,
+        status,
+        technologies,
+        link,
+        img,
+      } = req.body;
       const newProject = {
         name,
         description,
@@ -74,6 +91,7 @@ const projectCtrl = {
         status,
         technologies,
         link,
+        img,
       };
 
       await Projects.findByIdAndUpdate(id, newProject);
