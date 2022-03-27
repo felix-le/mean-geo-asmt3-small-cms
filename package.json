@@ -1,9 +1,10 @@
 {
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "start": "nodemon server.js"
   },
   "dependencies": {
+    "assert": "^2.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^14.3.2",
@@ -12,6 +13,7 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.2.7",
     "morgan": "^1.10.0",
+    "node-cache": "^5.1.2",
     "nodemon": "^2.0.15"
   }
 }
