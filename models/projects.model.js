@@ -24,7 +24,6 @@ let projectsSchema = new mongoose.Schema(
     },
     technologies: {
       type: Object,
-      required: true,
     },
     link: {
       type: String,
