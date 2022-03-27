@@ -4,7 +4,6 @@ const logger = require('morgan'); // log request
 const cors = require('cors'); // Cross-Origin Resource Sharing
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const cache = require('./routeCache');
 const routes = require('./routes/index'); // import routes
 const app = express();
 
@@ -30,7 +29,7 @@ mongoose.connect(
 // port default is 3000 or can create .env file to set port
 const PORT = process.env.PORT || 5500;
 
-app.use('/', cache(300), routes); // use routes
+app.use('/', routes); // use routes
 
 app.listen(PORT, () => {
   console.log('Server is running on port', PORT || 5500);
