@@ -1,15 +1,20 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const projectCtrl = require('../../controllers/projects.controller');
-const auth = require('../../middleware/auth');
+const projectCtrl = require("../../controllers/projects.controller");
+const auth = require("../../middleware/auth");
 
-router.get('/', projectCtrl.getAllProjects);
+router.use((req, res, next) => {
+  res.header("Content-Type", "application/json");
+  next();
+});
 
-router.post('/create', projectCtrl.createProject);
+router.get("/", projectCtrl.getAllProjects);
 
-router.delete('/:id/delete', projectCtrl.deleteProject);
+router.post("/create", projectCtrl.createProject);
+
+router.delete("/:id/delete", projectCtrl.deleteProject);
 
 // updated project
-router.put('/:id/update', projectCtrl.updateProject);
+router.put("/:id/update", projectCtrl.updateProject);
 
 module.exports = router;
