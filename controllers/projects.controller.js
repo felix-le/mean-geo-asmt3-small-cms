@@ -5,12 +5,14 @@ const { statusConstants } = require("../constants/status.constant");
 const projectCtrl = {
   getAllProjects: async (req, res) => {
     try {
-      const allproject = await Projects.find();
+      const allProjects = await Projects.find({});
+      console.log(allProjects);
+
       return responseServer(
         res,
         statusConstants.SUCCESS_CODE,
         "Get data successfully",
-        allproject
+        allProjects
       );
     } catch (error) {
       return raiseException(res, statusConstants.BAD_REQUEST_CODE, error);
